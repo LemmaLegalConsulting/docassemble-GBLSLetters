@@ -18,28 +18,67 @@ code: |
   clients[0].name
   attorneys[0].name
   
-  signature_date
-  gbls_download
-  
-#  template_to_fill  
-#  if not start_fresh:
-#    load_existing_answers
+  if document_list['Plain_Language_Retainer']:
+    Plain_Language_Retainer_Document
+  if document_list['No_Contact_Letter_Working']:
+    No_Contact_Letter_Working_Document
+  if document_list['No_Contact_Letter']:
+    No_Contact_Letter_Document
+  if document_list['Letter_to_client_to_prepare_for_interview']:
+    Letter_to_client_to_prepare_for_interview_Document
+  if document_list['Letter_to_client_sending_Discharge_working']:
+    Letter_to_client_sending_Discharge_working_Document
+  if document_list['Letter_to_Client_re_Telephonic_Working']:
+    Letter_to_Client_re_Telephonic_Working_Document
+  if document_list['Letter_to_Client_Final_Credit_Report_Working']:
+    Letter_to_Client_Final_Credit_Report_Working_Document
+  if document_list['General_Release_Working']:
+    General_Release_Working_Document
+  if document_list['Closing_letter_GLBS_LL_Draft']:
+    Closing_letter_GLBS_LL_Draft_Docuemnt
+  if document_list['Client_Appointment_Reminder_Working']:
+    Client_Appointment_Reminder_Working_Document
+  if document_list['Affirmative_Debt_Collection_Working_Draft']:
+    Affirmative_Debt_Collection_Working_Draft_Document
     
-
-#  download_template
-#---
-#id: upload template
-#question: |
-#  Upload a template to fill in
-#subquestion: |
-#  You can select an existing set of answers, like from an intake interview, to use 
-#  to complete the template. If you add new fields to the template,
-#  you will get a very basic chance to provide an answer to the new field.
-#fields:
-#  - Upload a DOCX template file: template_to_fill
-#    datatype: file
-#    accept: |
-#      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"    
+  signature_date
+  gbls_download   
+---
+code: |
+  legal_problems
+  Plain_Language_Retainer_Document=True
+---
+code: | 
+  clients[0].address
+  No_Contact_Letter_Working_Document=True
+---
+code: | 
+  No_Contact_Letter_Document=True
+---
+code: | 
+  document
+  Letter_to_client_to_prepare_for_interview_Document=True
+---
+code: | 
+  Letter_to_client_sending_Discharge_working_Document=True
+---
+code: | 
+  Letter_to_Client_re_Telephonic_Working_Document=True
+---
+code: | 
+  Letter_to_Client_Final_Credit_Report_Working_Document=True
+---
+code: | 
+  General_Release_Working_Document=True
+---
+code: | 
+  Closing_letter_GLBS_LL_Draft_Document=True
+---
+code: | 
+  Client_Appointment_Reminder_Working_Document=True
+---
+code: | 
+  Affirmative_Debt_Collection_Working_Draft_Document=True
 ---
 id: gbls intro
 continue button field: gbls_intro_screen
@@ -87,7 +126,32 @@ fields:
       - Letter to client to prepare for interview: Letter_to_client_to_prepare_for_interview
       - No Contact Letter: No_Contact_Letter
       - No Contact Letter Working: No_Contact_Letter_Working
+      - Plain Language Retainer: Plain_Language_Retainer
     none of the above: false
+---
+id: legal problems
+question: |
+  What is the legal problem that you have?
+fields:
+  - no label: legal_problems
+---
+id: letter to client to prepare for interview
+question: |
+  Below are the different options for the interview. Choose the one that applies to you.
+fields:
+  - no label: Documents_for_interview
+    datatype: checkboxes
+    choices:
+      - Social Security Card or letter from Social Security showing your Social Security number: social_security
+      - Driver’s license or other Picture ID: license
+      -	Any papers concerning your debts: papers_concerning_debts
+      -	Any papers concerning any lawsuits that you are involved in: papers_concerning_lawsuits
+      -	If you are divorced, copy of divorce decree and any child support or alimony orders: copy_of_divorce_decree
+      -	Copies of your bank statements if you have a bank account. Please bring statements for up to a year ago, if you have them. More recent statements are more important: copy_of_bank_statements
+      -	Copies of your pay stubs for this year if you are working: copy_of_pay_stubs
+      -	If you receive social security or a pension or unemployment or any type of welfare payments, documents showing your payments: documents_concerning_welfare
+      -	Tax returns for last two years if you filed taxes: tax_returns
+
 ---
 id: download template
 event: download_template
