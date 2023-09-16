@@ -7,25 +7,25 @@ metadata:
     Fill in the blanks
 ---
 objects:
-  clients: ALPeopleList.using(there_are_any=True)
-  attorneys: ALPeopleList.using(there_are_any=True)
----
-features:
-  use catchall: True
+  clients: ALPeopleList.using(there_are_any=False)
+  attorneys: ALPeopleList.using(there_are_any=False)
 ---
 mandatory: True
 code: |
   al_intro_screen
+  gbls_intro_screen
   
   clients[0].name
-  other_parties[0].name
+  attorneys[0].name
   
-  template_to_fill  
-  if not start_fresh:
-    load_existing_answers
-    
   signature_date
   gbls_download
+  
+#  template_to_fill  
+#  if not start_fresh:
+#    load_existing_answers
+    
+
 #  download_template
 #---
 #id: upload template
@@ -41,6 +41,35 @@ code: |
 #    accept: |
 #      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"    
 ---
+id: gbls intro
+continue button field: gbls_intro_screen
+question: | 
+  Financial Forms
+subquestion: |
+  This form can help you prepare the following financial forms: 
+  
+    * Affirmative Debt Collection Working Draft
+    
+    * Client Appointment Reminder Working
+    
+    * Closing letter GLBS LL Draft
+    
+    * General Release Working
+    
+    * Letter to Client Final Credit Report Working
+    
+    * Letter to Client re Telephonic Working
+    
+    * Letter to client sending Discharge working
+    
+    * Letter to client to prepare for interview
+    
+    * No Contact Letter
+    
+    * No Contact Letter Working
+    
+    * Plain Language Retainer
+---
 id: download template
 event: download_template
 question: |
@@ -50,57 +79,58 @@ attachment:
     code: |
       template_to_fill[0]
 ---
-code: |
-  if user_has_privilege(['developer', 'admin']):
-    all_answer_sets = get_saved_interview_list(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", user_id="all", exclude_newly_started_sessions=False)
-  else:
-    all_answer_sets = get_saved_interview_list(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", exclude_newly_started_sessions=False)
----
-code: |
-  load_interview_answers(all_answer_sets[int(selected_answers)]["filename"], all_answer_sets[int(selected_answers)]["key"])
-  load_existing_answers = True
----
+#---
+#code: |
+#  if user_has_privilege(['developer', 'admin']):
+#    all_answer_sets = get_saved_interview_list(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", user_id="all", exclude_newly_started_sessions=False)
+#  else:
+#    all_answer_sets = get_saved_interview_list(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", exclude_newly_started_sessions=False)
+#---
+#code: |
+#  load_interview_answers(all_answer_sets[int(selected_answers)]["filename"], all_answer_sets[int(selected_answers)]["key"])
+#  load_existing_answers = True
+#---
 ###################### Catchall questions ###########################################
----
-generic object: DACatchAll
-question: |
-  What is ${ x.object_name() }?
-fields:
-  - no label: x.value
-validation code: |
-  define(x.instanceName, x.value)
----
-if: |
-  x.context == 'float'
-generic object: DACatchAll
-question: |
-  How much is ${ x.object_name() }?
-fields:
-  - Amount: x.value
-    datatype: currency
-validation code: |
-  define(x.instanceName, x.value)
----
-if: |
-  x.data_type_guess() == 'bool'
-generic object: DACatchAll
-question: |
-  ${x.object_name()}?
-yesno: x.value
-validation code: |
-  define(x.instanceName, x.value)
----
-if: |
-  x.object_name().endswith('date')
-generic object: DACatchAll
-question: |
-  ${x.object_name()}?
-fields:
-  - Date: x.value
-    datatype: date
-validation code: |
-  define(x.instanceName, x.value)
----
+#---
+#generic object: DACatchAll
+#question: |
+#  What is ${ x.object_name() }?
+#fields:
+#  - no label: x.value
+#validation code: |
+#  define(x.instanceName, x.value)
+#---
+#if: |
+#  x.context == 'float'
+#generic object: DACatchAll
+#question: |
+#  How much is ${ x.object_name() }?
+#fields:
+#  - Amount: x.value
+#    datatype: currency
+#validation code: |
+#  define(x.instanceName, x.value)
+#---
+#if: |
+#  x.data_type_guess() == 'bool'
+#generic object: DACatchAll
+#question: |
+#  ${x.object_name()}?
+#yesno: x.value
+#validation code: |
+#  define(x.instanceName, x.value)
+#---
+#if: |
+#  x.object_name().endswith('date')
+#generic object: DACatchAll
+#question: |
+#  ${x.object_name()}?
+#fields:
+#  - Date: x.value
+#    datatype: date
+#validation code: |
+#  define(x.instanceName, x.value)
+#---
 attachments:
   - name: Affirmative Debt Collection Working Draft
     filename: Affirmative_Debt_Collection_Working_Draft.docx    
@@ -109,14 +139,14 @@ attachments:
     docx template file: Affirmative_Debt_Collection_Working_Draft.docx 
     
   - name: Client Appointment Reminder Working
-    filename: Client_Appointment_Reminder_Working.docx   
+    filename: Client_Appointment_Reminder_Working.docx 
     variable name: Client_Appointment_Reminder_Working[i]      
     skip undefined: True
     docx template file: Client_Appointment_Reminder_Working.docx
   
   - name: Closing letter GLBS LL Draft
     filename: Closing_letter_GLBS_LL_Draft.docx   
-    variable name: Closing_letter_GLBS_LL_Draft[i]      
+    variable name: Closing_letter_GLBS_LL_Draft[i]     
     skip undefined: True
     docx template file: Closing_letter_GLBS_LL_Draft.docx
     
@@ -169,7 +199,30 @@ attachments:
     docx template file: Plain_Language_Retainer.docx
 ---
 objects:
- - al_user_bundle: ALDocumentBundle.using(elements=[Plain Language Retainer, No Contact Letter Working, No Contact Letter, Letter to client to prepare for interview, Letter to client to prepare for interview, Letter to client sending Discharge working, Letter to Client re Telephonic Working, Letter to Client Final Credit Report Working, General Release Working, Closing letter GLBS LL Draft, Client Appointment Reminder Working, Affirmative Debt Collection Working Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True) 
+  - Plain_Language_Retainer: ALDocument.using(title="Plain Language Retainer", filename="Plain_Language_Retainer.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - No_Contact_Letter_Working: ALDocument.using(title="No Contact Letter Working", filename="No_Contact_Letter_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - No_Contact_Letter: ALDocument.using(title="No Contact Letter", filename="No_Contact_Letter.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)  
+  - Letter_to_client_to_prepare_for_interview: ALDocument.using(title="Letter to client to prepare for interview", filename="Letter_to_client_to_prepare_for_interview.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Letter_to_client_sending_Discharge_working: ALDocument.using(title="Letter to client sending Discharge working", filename="Letter_to_client_sending_Discharge_working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Letter_to_Client_re_Telephonic_Working: ALDocument.using(title="Letter to Client re Telephonic Working", filename="Letter_to_Client_re_Telephonic_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Letter_to_Client_Final_Credit_Report_Working: ALDocument.using(title="Letter to Client Final Credit Report Working", filename="Letter_to_Client_Final_Credit_Report_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - General_Release_Working: ALDocument.using(title="General Release Working", filename="General_Release_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Closing_letter_GLBS_LL_Draft: ALDocument.using(title="Closing letter GLBS LL Draft", filename="Closing_letter_GLBS_LL_Draft.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Client_Appointment_Reminder_Working: ALDocument.using(title="Client Appointment Reminder Working", filename="Client_Appointment_Reminder_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Affirmative_Debt_Collection_Working_Draft: ALDocument.using(title="Affirmative Debt Collection Working Draft", filename="Affirmative_Debt_Collection_Working_Draft.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+---
+objects:
+ - al_user_bundle: ALDocumentBundle.using(elements=[Plain_Language_Retainer, No_Contact_Letter_Working, No_Contact_Letter, Letter_to_client_to_prepare_for_interview, Letter_to_client_to_prepare_for_interview, Letter_to_client_sending_Discharge_working, Letter_to_Client_re_Telephonic_Working, Letter_to_Client_Final_Credit_Report_Working, General_Release_Working, Closing_letter_GLBS_LL_Draft, Client_Appointment_Reminder_Working, Affirmative_Debt_Collection_Working_Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True) 
  - al_court_bundle: ALDocumentBundle.using(elements=[Plain Language Retainer, No Contact Letter Working, No Contact Letter, Letter to client to prepare for interview, Letter to client to prepare for interview, Letter to client sending Discharge working, Letter to Client re Telephonic Working, Letter to Client Final Credit Report Working, General Release Working, Closing letter GLBS LL Draft, Client Appointment Reminder Working, Affirmative Debt Collection Working Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True)
 ---
 id: download documents
