@@ -15,10 +15,18 @@ features:
 ---
 mandatory: True
 code: |
+  al_intro_screen
+  
+  clients[0].name
+  other_parties[0].name
+  
   template_to_fill  
   if not start_fresh:
     load_existing_answers
-  download_template
+    
+  signature_date
+  gbls_download
+#  download_template
 #---
 #id: upload template
 #question: |
@@ -92,3 +100,87 @@ fields:
     datatype: date
 validation code: |
   define(x.instanceName, x.value)
+---
+attachments:
+  - name: Affirmative Debt Collection Working Draft
+    filename: Affirmative_Debt_Collection_Working_Draft.docx    
+    variable name: Affirmative_Debt_Collection_Working_Draft[i]      
+    skip undefined: True
+    docx template file: Affirmative_Debt_Collection_Working_Draft.docx 
+    
+  - name: Client Appointment Reminder Working
+    filename: Client_Appointment_Reminder_Working.docx   
+    variable name: Client_Appointment_Reminder_Working[i]      
+    skip undefined: True
+    docx template file: Client_Appointment_Reminder_Working.docx
+  
+  - name: Closing letter GLBS LL Draft
+    filename: Closing_letter_GLBS_LL_Draft.docx   
+    variable name: Closing_letter_GLBS_LL_Draft[i]      
+    skip undefined: True
+    docx template file: Closing_letter_GLBS_LL_Draft.docx
+    
+  - name: General Release Working
+    filename: General_Release_Working.docx  
+    variable name: General_Release_Working[i]      
+    skip undefined: True
+    docx template file: General_Release_Working.docx
+    
+  - name: Letter to Client Final Credit Report Working
+    filename: Letter_to_Client_Final_Credit_Report_Working.docx  
+    variable name: Letter_to_Client_Final_Credit_Report_Working[i]      
+    skip undefined: True
+    docx template file: Letter_to_Client_Final_Credit_Report_Working.docx
+
+  - name: Letter to Client re Telephonic Working
+    filename: Letter_to_Client_re_Telephonic_Working.docx  
+    variable name: Letter_to_Client_re_Telephonic_Working[i]      
+    skip undefined: True
+    docx template file: Letter_to_Client_re_Telephonic_Working.docx
+    
+  - name: Letter to client sending Discharge working
+    filename: Letter_to_client_sending_Discharge_working.docx  
+    variable name: Letter_to_client_sending_Discharge_working[i]      
+    skip undefined: True
+    docx template file: Letter_to_client_sending_Discharge_working.docx  
+    
+  - name: Letter to client to prepare for interview
+    filename: Letter_to_client_to_prepare_for_interview.docx  
+    variable name: Letter_to_client_to_prepare_for_interview[i]      
+    skip undefined: True
+    docx template file: Letter_to_client_to_prepare_for_interview.docx
+    
+  - name: No Contact Letter
+    filename: No_Contact_Letter.docx  
+    variable name: No_Contact_Letter[i]      
+    skip undefined: True
+    docx template file: No_Contact_Letter.docx
+    
+  - name: No Contact Letter Working
+    filename: No_Contact_Letter_Working.docx  
+    variable name: No_Contact_Letter_Working[i]      
+    skip undefined: True
+    docx template file: No_Contact_Letter_Working.docx
+    
+  - name: Plain Language Retainer
+    filename: Plain_Language_Retainer.docx  
+    variable name: Plain_Language_Retainer[i]      
+    skip undefined: True
+    docx template file: Plain_Language_Retainer.docx
+---
+objects:
+ - al_user_bundle: ALDocumentBundle.using(elements=[Plain Language Retainer, No Contact Letter Working, No Contact Letter, Letter to client to prepare for interview, Letter to client to prepare for interview, Letter to client sending Discharge working, Letter to Client re Telephonic Working, Letter to Client Final Credit Report Working, General Release Working, Closing letter GLBS LL Draft, Client Appointment Reminder Working, Affirmative Debt Collection Working Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True) 
+ - al_court_bundle: ALDocumentBundle.using(elements=[Plain Language Retainer, No Contact Letter Working, No Contact Letter, Letter to client to prepare for interview, Letter to client to prepare for interview, Letter to client sending Discharge working, Letter to Client re Telephonic Working, Letter to Client Final Credit Report Working, General Release Working, Closing letter GLBS LL Draft, Client Appointment Reminder Working, Affirmative Debt Collection Working Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True)
+---
+id: download documents
+event: gbls_download
+question: |
+  All done
+subquestion: |
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
