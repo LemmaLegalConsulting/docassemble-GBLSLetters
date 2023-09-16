@@ -19,19 +19,19 @@ code: |
   if not start_fresh:
     load_existing_answers
   download_template
----
-id: upload template
-question: |
-  Upload a template to fill in
-subquestion: |
-  You can select an existing set of answers, like from an intake interview, to use 
-  to complete the template. If you add new fields to the template,
-  you will get a very basic chance to provide an answer to the new field.
-fields:
-  - Upload a DOCX template file: template_to_fill
-    datatype: file
-    accept: |
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"    
+#---
+#id: upload template
+#question: |
+#  Upload a template to fill in
+#subquestion: |
+#  You can select an existing set of answers, like from an intake interview, to use 
+#  to complete the template. If you add new fields to the template,
+#  you will get a very basic chance to provide an answer to the new field.
+#fields:
+#  - Upload a DOCX template file: template_to_fill
+#    datatype: file
+#    accept: |
+#      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"    
 ---
 id: download template
 event: download_template
