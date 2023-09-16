@@ -70,6 +70,25 @@ subquestion: |
     
     * Plain Language Retainer
 ---
+id: gbs document list
+question: |
+  Which financia documents do you need?
+fields:
+  - Financial documents: document_list
+    datatype: checkboxes
+    choices: 
+      - Affirmative Debt Collection Working Draft: Affirmative_Debt_Collection_Working_Draft
+      - Client Appointment Reminder Working: Client_Appointment_Reminder_Working
+      - Closing letter GLBS LL Draft: Closing_letter_GLBS_LL_Draft
+      - General Release Working: General_Release_Working
+      - Letter to Client Final Credit Report Working: Letter_to_Client_Final_Credit_Report_Working
+      - Letter to Client re Telephonic Working: Letter_to_Client_re_Telephonic_Working
+      - Letter to client sending Discharge working: Letter_to_client_sending_Discharge_working
+      - Letter to client to prepare for interview: Letter_to_client_to_prepare_for_interview
+      - No Contact Letter: No_Contact_Letter
+      - No Contact Letter Working: No_Contact_Letter_Working
+    none of the above: false
+---
 id: download template
 event: download_template
 question: |
@@ -78,6 +97,39 @@ attachment:
   docx template file:
     code: |
       template_to_fill[0]
+---
+code: |
+  Affirmative_Debt_Collection_Working_Draft.enabled = document_list['Affirmative_Debt_Collection_Working_Draft']
+---
+code: |
+  Client_Appointment_Reminder_Working.enabled = document_list['Client_Appointment_Reminder_Working']
+---
+code: |
+  Closing_letter_GLBS_LL_Draft.enabled = document_list['Closing_letter_GLBS_LL_Draft']
+---
+code: |
+  General_Release_Working.enabled = document_list['General_Release_Working']
+---
+code: |
+  Letter_to_Client_Final_Credit_Report_Working.enabled = document_list['Letter_to_Client_Final_Credit_Report_Working']
+---
+code: |
+  Letter_to_Client_re_Telephonic_Working.enabled = document_list['Letter_to_Client_re_Telephonic_Working']
+---
+code: |
+  Letter_to_client_sending_Discharge_working.enabled = document_list['Letter_to_client_sending_Discharge_working']
+---
+code: |
+  Letter_to_client_to_prepare_for_interview.enabled = document_list['Letter_to_client_to_prepare_for_interview']
+---
+code: |
+  No_Contact_Letter.enabled = document_list['No_Contact_Letter']
+---
+code: |
+  No_Contact_Letter_Working.enabled = document_list['No_Contact_Letter_Working']
+---
+code: |
+  Plain_Language_Retainer.enabled = document_list['Plain_Language_Retainer']
 ---
 #---
 #code: |
