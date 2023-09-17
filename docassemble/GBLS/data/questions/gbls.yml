@@ -9,14 +9,13 @@ metadata:
 objects:
   clients: ALPeopleList.using(there_are_any=False)
   attorneys: ALPeopleList.using(there_are_any=False)
+  documents: ALPeopleList
 ---
 mandatory: True
 code: |
-  al_intro_screen
   gbls_intro_screen
   
   clients[0].name
-  attorneys[0].name
   
   if document_list['Plain_Language_Retainer']:
     Plain_Language_Retainer_Document
@@ -53,28 +52,37 @@ code: |
   No_Contact_Letter_Working_Document=True
 ---
 code: | 
+  clients[0].address
   No_Contact_Letter_Document=True
 ---
 code: | 
+  clients[0].address
   document
   Letter_to_client_to_prepare_for_interview_Document=True
 ---
 code: | 
+  clients[0].address
+  any_debts_not_discharged 
+  any_secured_debts 
   Letter_to_client_sending_Discharge_working_Document=True
 ---
 code: | 
   Letter_to_Client_re_Telephonic_Working_Document=True
 ---
 code: | 
+  clients [0].address
   Letter_to_Client_Final_Credit_Report_Working_Document=True
 ---
 code: | 
+  law_firm 
   General_Release_Working_Document=True
 ---
 code: | 
+  clients[0].address
   Closing_letter_GLBS_LL_Draft_Document=True
 ---
 code: | 
+  clients[0].address
   Client_Appointment_Reminder_Working_Document=True
 ---
 code: | 
@@ -109,6 +117,22 @@ subquestion: |
     
     * Plain Language Retainer
 ---
+id: name of the first person
+sets:
+  - clients[0].name.first
+  - clients[0].name.last
+  - clients[0].name.middle
+  - clients[0].name.suffix
+question: |
+  % if hasattr(x, 'ask_number') and x.ask_number and x.target_number == 1:
+  Name of ${ noun_plural(x.object_name(),1) }
+  % else:
+  What is your name 
+  % endif
+fields:
+  - code: |
+      clients[0].name_fields()
+---
 id: gbs document list
 question: |
   Which financia documents do you need?
@@ -142,25 +166,37 @@ fields:
   - no label: Documents_for_interview
     datatype: checkboxes
     choices:
-      - Social Security Card or letter from Social Security showing your Social Security number: social_security
-      - Driver’s license or other Picture ID: license
-      -	Any papers concerning your debts: papers_concerning_debts
-      -	Any papers concerning any lawsuits that you are involved in: papers_concerning_lawsuits
-      -	If you are divorced, copy of divorce decree and any child support or alimony orders: copy_of_divorce_decree
-      -	Copies of your bank statements if you have a bank account. Please bring statements for up to a year ago, if you have them. More recent statements are more important: copy_of_bank_statements
-      -	Copies of your pay stubs for this year if you are working: copy_of_pay_stubs
-      -	If you receive social security or a pension or unemployment or any type of welfare payments, documents showing your payments: documents_concerning_welfare
-      -	Tax returns for last two years if you filed taxes: tax_returns
+      - Social Security Card or letter from Social Security showing your Social Security number: documents.social_security
+      - Driver’s license or other Picture ID: documents.license
+      -	Any papers concerning your debts: documents.papers_concerning_debts
+      -	Any papers concerning any lawsuits that you are involved in: documents.papers_concerning_lawsuits
+      -	If you are divorced, copy of divorce decree and any child support or alimony orders: documents.copy_of_divorce_decree
+      -	Copies of your bank statements if you have a bank account. Please bring statements for up to a year ago, if you have them. More recent statements are more important: documents.copy_of_bank_statements
+      -	Copies of your pay stubs for this year if you are working: documents.copy_of_pay_stubs
+      -	If you receive social security or a pension or unemployment or any type of welfare payments, documents showing your payments: documents.documents_concerning_welfare
+      -	Tax returns for last two years if you filed taxes: documents.tax_returns
+---
+id: any debts not discharged
+question: |
+  Do you have any debts not discharged?
+fields:
+  - no label: any_debts_not_discharged
+    datatype: yesnoradio
+---
+id: any secured debts
+question: |
+  Do you have any secured debts?
+fields:
+  - no label: any_secured_debts
+    datatype: yesnoradio
 
 ---
-id: download template
-event: download_template
+id: Clients law firm
 question: |
-  Your template is ready
-attachment: 
-  docx template file:
-    code: |
-      template_to_fill[0]
+  Which law firm has been maintaining your information?
+fields:
+  - no label: law_firm
+  
 ---
 code: |
   Affirmative_Debt_Collection_Working_Draft.enabled = document_list['Affirmative_Debt_Collection_Working_Draft']
@@ -195,58 +231,6 @@ code: |
 code: |
   Plain_Language_Retainer.enabled = document_list['Plain_Language_Retainer']
 ---
-#---
-#code: |
-#  if user_has_privilege(['developer', 'admin']):
-#    all_answer_sets = get_saved_interview_list(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", user_id="all", exclude_newly_started_sessions=False)
-#  else:
-#    all_answer_sets = get_saved_interview_list(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", exclude_newly_started_sessions=False)
-#---
-#code: |
-#  load_interview_answers(all_answer_sets[int(selected_answers)]["filename"], all_answer_sets[int(selected_answers)]["key"])
-#  load_existing_answers = True
-#---
-###################### Catchall questions ###########################################
-#---
-#generic object: DACatchAll
-#question: |
-#  What is ${ x.object_name() }?
-#fields:
-#  - no label: x.value
-#validation code: |
-#  define(x.instanceName, x.value)
-#---
-#if: |
-#  x.context == 'float'
-#generic object: DACatchAll
-#question: |
-#  How much is ${ x.object_name() }?
-#fields:
-#  - Amount: x.value
-#    datatype: currency
-#validation code: |
-#  define(x.instanceName, x.value)
-#---
-#if: |
-#  x.data_type_guess() == 'bool'
-#generic object: DACatchAll
-#question: |
-#  ${x.object_name()}?
-#yesno: x.value
-#validation code: |
-#  define(x.instanceName, x.value)
-#---
-#if: |
-#  x.object_name().endswith('date')
-#generic object: DACatchAll
-#question: |
-#  ${x.object_name()}?
-#fields:
-#  - Date: x.value
-#    datatype: date
-#validation code: |
-#  define(x.instanceName, x.value)
-#---
 attachments:
   - name: Affirmative Debt Collection Working Draft
     filename: Affirmative_Debt_Collection_Working_Draft.docx    
@@ -319,7 +303,8 @@ objects:
   
   - No_Contact_Letter_Working: ALDocument.using(title="No Contact Letter Working", filename="No_Contact_Letter_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
-  - No_Contact_Letter: ALDocument.using(title="No Contact Letter", filename="No_Contact_Letter.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)  
+  - No_Contact_Letter: ALDocument.using(title="No Contact Letter", filename="No_Contact_Letter.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE) 
+  
   - Letter_to_client_to_prepare_for_interview: ALDocument.using(title="Letter to client to prepare for interview", filename="Letter_to_client_to_prepare_for_interview.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
   - Letter_to_client_sending_Discharge_working: ALDocument.using(title="Letter to client sending Discharge working", filename="Letter_to_client_sending_Discharge_working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
@@ -339,7 +324,7 @@ objects:
 ---
 objects:
  - al_user_bundle: ALDocumentBundle.using(elements=[Plain_Language_Retainer, No_Contact_Letter_Working, No_Contact_Letter, Letter_to_client_to_prepare_for_interview, Letter_to_client_to_prepare_for_interview, Letter_to_client_sending_Discharge_working, Letter_to_Client_re_Telephonic_Working, Letter_to_Client_Final_Credit_Report_Working, General_Release_Working, Closing_letter_GLBS_LL_Draft, Client_Appointment_Reminder_Working, Affirmative_Debt_Collection_Working_Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True) 
- - al_court_bundle: ALDocumentBundle.using(elements=[Plain Language Retainer, No Contact Letter Working, No Contact Letter, Letter to client to prepare for interview, Letter to client to prepare for interview, Letter to client sending Discharge working, Letter to Client re Telephonic Working, Letter to Client Final Credit Report Working, General Release Working, Closing letter GLBS LL Draft, Client Appointment Reminder Working, Affirmative Debt Collection Working Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True)
+ #- al_court_bundle: ALDocumentBundle.using(elements=[Plain Language Retainer, No Contact Letter Working, No Contact Letter, Letter to client to prepare for interview, Letter to client to prepare for interview, Letter to client sending Discharge working, Letter to Client re Telephonic Working, Letter to Client Final Credit Report Working, General Release Working, Closing letter GLBS LL Draft, Client Appointment Reminder Working, Affirmative Debt Collection Working Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True)
 ---
 id: download documents
 event: gbls_download
