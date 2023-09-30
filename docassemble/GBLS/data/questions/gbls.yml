@@ -15,66 +15,91 @@ mandatory: True
 code: |
   gbls_intro_screen
   
-  clients[0].name
-  
   if document_list['Plain_Language_Retainer']:
     Plain_Language_Retainer_Document
-  if document_list['No_Contact_Letter_Working']:
-    No_Contact_Letter_Working_Document
+    
   if document_list['No_Contact_Letter']:
     No_Contact_Letter_Document
+    
   if document_list['Letter_to_client_to_prepare_for_interview']:
     Letter_to_client_to_prepare_for_interview_Document
+    
   if document_list['Letter_to_client_sending_Discharge_working']:
     Letter_to_client_sending_Discharge_working_Document
+    
+  if document_list['No_Contact_Letter_Working']:
+    No_Contact_Letter_Working_Document 
+  
   if document_list['Letter_to_Client_re_Telephonic_Working']:
     Letter_to_Client_re_Telephonic_Working_Document
+    
   if document_list['Letter_to_Client_Final_Credit_Report_Working']:
     Letter_to_Client_Final_Credit_Report_Working_Document
+    
   if document_list['General_Release_Working']:
     General_Release_Working_Document
+    
   if document_list['Closing_letter_GLBS_LL_Draft']:
-    Closing_letter_GLBS_LL_Draft_Docuemnt
+    Closing_letter_GLBS_LL_Draft_Document
+    
   if document_list['Client_Appointment_Reminder_Working']:
     Client_Appointment_Reminder_Working_Document
+    
   if document_list['Affirmative_Debt_Collection_Working_Draft']:
     Affirmative_Debt_Collection_Working_Draft_Document
     
   signature_date
-  gbls_download   
+  gbls_download  
+  
+  
+  
+    
+   
 ---
 code: |
   legal_problems
+  clients[0].name
+  clients[0].signature
   Plain_Language_Retainer_Document=True
 ---
 code: | 
+  clients[0].name
   clients[0].address
+  case_type
+  docket_number
   No_Contact_Letter_Working_Document=True
 ---
 code: | 
+  clients[0].name
   clients[0].address
+  docket_number
   No_Contact_Letter_Document=True
 ---
 code: | 
   clients[0].address
-  document
+  Documents_for_interview
   Letter_to_client_to_prepare_for_interview_Document=True
 ---
 code: | 
+  clients[0].name
   clients[0].address
   any_debts_not_discharged 
   any_secured_debts 
   Letter_to_client_sending_Discharge_working_Document=True
 ---
 code: | 
+  clients[0].name
   Letter_to_Client_re_Telephonic_Working_Document=True
 ---
 code: | 
-  clients [0].address
+  clients[0].name
+  clients[0].address
   Letter_to_Client_Final_Credit_Report_Working_Document=True
 ---
 code: | 
+  clients[0].name
   law_firm 
+  clients[0].signature
   General_Release_Working_Document=True
 ---
 code: | 
@@ -86,6 +111,10 @@ code: |
   Client_Appointment_Reminder_Working_Document=True
 ---
 code: | 
+  clients[0].name
+  other_parties[0].name
+  case_type
+  clients[0].signature
   Affirmative_Debt_Collection_Working_Draft_Document=True
 ---
 id: gbls intro
@@ -133,9 +162,21 @@ fields:
   - code: |
       clients[0].name_fields()
 ---
-id: gbs document list
+id: name of the other party
+sets:
+  - other_parties[0].name.first
+  - other_parties[0].name.last
+  - other_parties[0].name.middle
+  - other_parties[0].name.suffix
 question: |
-  Which financia documents do you need?
+  What is the defendant's name?
+fields:
+  - code: |
+      other_parties[0].name_fields()
+---
+id: gbls document list
+question: |
+  Which financial documents do you need?
 fields:
   - Financial documents: document_list
     datatype: checkboxes
@@ -158,6 +199,19 @@ question: |
   What is the legal problem that you have?
 fields:
   - no label: legal_problems
+    datatype: area
+---
+id: case type
+question: |
+  What is the case type
+fields:
+  - no label: case_type
+---
+id: docket number
+question: |
+  What is the docket number?
+fields:
+  - no label: docket_number
 ---
 id: letter to client to prepare for interview
 question: |
@@ -166,15 +220,16 @@ fields:
   - no label: Documents_for_interview
     datatype: checkboxes
     choices:
-      - Social Security Card or letter from Social Security showing your Social Security number: documents.social_security
-      - Driver’s license or other Picture ID: documents.license
-      -	Any papers concerning your debts: documents.papers_concerning_debts
-      -	Any papers concerning any lawsuits that you are involved in: documents.papers_concerning_lawsuits
-      -	If you are divorced, copy of divorce decree and any child support or alimony orders: documents.copy_of_divorce_decree
-      -	Copies of your bank statements if you have a bank account. Please bring statements for up to a year ago, if you have them. More recent statements are more important: documents.copy_of_bank_statements
-      -	Copies of your pay stubs for this year if you are working: documents.copy_of_pay_stubs
-      -	If you receive social security or a pension or unemployment or any type of welfare payments, documents showing your payments: documents.documents_concerning_welfare
-      -	Tax returns for last two years if you filed taxes: documents.tax_returns
+      - Social Security Card or letter from Social Security showing your Social Security number
+      - Driver’s license or other Picture ID
+      -	Any papers concerning your debts
+      -	Any papers concerning any lawsuits that you are involved in
+      -	If you are divorced, copy of divorce decree and any child support or alimony orders
+      -	Copies of your bank statements if you have a bank account. Please bring statements for up to a year ago, if you have them. More recent statements are more important
+      -	Copies of your pay stubs for this year if you are working
+      -	If you receive social security or a pension or unemployment or any type of welfare payments, documents showing your payments
+      -	Tax returns for last two years if you filed taxes
+
 ---
 id: any debts not discharged
 question: |
@@ -304,7 +359,7 @@ objects:
   - No_Contact_Letter_Working: ALDocument.using(title="No Contact Letter Working", filename="No_Contact_Letter_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
   - No_Contact_Letter: ALDocument.using(title="No Contact Letter", filename="No_Contact_Letter.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE) 
-  
+#  
   - Letter_to_client_to_prepare_for_interview: ALDocument.using(title="Letter to client to prepare for interview", filename="Letter_to_client_to_prepare_for_interview.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
   - Letter_to_client_sending_Discharge_working: ALDocument.using(title="Letter to client sending Discharge working", filename="Letter_to_client_sending_Discharge_working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
@@ -312,7 +367,7 @@ objects:
   - Letter_to_Client_re_Telephonic_Working: ALDocument.using(title="Letter to Client re Telephonic Working", filename="Letter_to_Client_re_Telephonic_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
   - Letter_to_Client_Final_Credit_Report_Working: ALDocument.using(title="Letter to Client Final Credit Report Working", filename="Letter_to_Client_Final_Credit_Report_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
-  
+#  
   - General_Release_Working: ALDocument.using(title="General Release Working", filename="General_Release_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
   - Closing_letter_GLBS_LL_Draft: ALDocument.using(title="Closing letter GLBS LL Draft", filename="Closing_letter_GLBS_LL_Draft.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
@@ -323,8 +378,7 @@ objects:
   
 ---
 objects:
- - al_user_bundle: ALDocumentBundle.using(elements=[Plain_Language_Retainer, No_Contact_Letter_Working, No_Contact_Letter, Letter_to_client_to_prepare_for_interview, Letter_to_client_to_prepare_for_interview, Letter_to_client_sending_Discharge_working, Letter_to_Client_re_Telephonic_Working, Letter_to_Client_Final_Credit_Report_Working, General_Release_Working, Closing_letter_GLBS_LL_Draft, Client_Appointment_Reminder_Working, Affirmative_Debt_Collection_Working_Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True) 
- #- al_court_bundle: ALDocumentBundle.using(elements=[Plain Language Retainer, No Contact Letter Working, No Contact Letter, Letter to client to prepare for interview, Letter to client to prepare for interview, Letter to client sending Discharge working, Letter to Client re Telephonic Working, Letter to Client Final Credit Report Working, General Release Working, Closing letter GLBS LL Draft, Client Appointment Reminder Working, Affirmative Debt Collection Working Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True)
+ - al_court_bundle: ALDocumentBundle.using(elements=[Plain_Language_Retainer, No_Contact_Letter, Letter_to_client_to_prepare_for_interview, Letter_to_client_sending_Discharge_working, No_Contact_Letter_Working, Letter_to_Client_re_Telephonic_Working, Letter_to_Client_Final_Credit_Report_Working, General_Release_Working, Closing_letter_GLBS_LL_Draft, Client_Appointment_Reminder_Working, Affirmative_Debt_Collection_Working_Draft], filename="financial_documents.docx", title="All forms to download for your records", enabled=True) 
 ---
 id: download documents
 event: gbls_download
@@ -332,9 +386,9 @@ question: |
   All done
 subquestion: |
   
-  ${ al_user_bundle.download_list_html() }
+  ${ al_court_bundle.download_list_html() }
   
 
-  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+  ${ al_court_bundle.send_button_html(show_editable_checkbox=True) }
 
 progress: 100
