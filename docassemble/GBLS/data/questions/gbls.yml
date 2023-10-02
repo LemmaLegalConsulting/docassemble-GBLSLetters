@@ -26,21 +26,18 @@ code: |
     
   if document_list['Letter_to_client_sending_Discharge']:
     Letter_to_client_sending_Discharge_Document
-    
-  if document_list['No_Contact_Letter_Working']:
-    No_Contact_Letter_Working_Document 
   
   if document_list['Letter_to_Client_re_Telephonic']:
     Letter_to_Client_re_Telephonic_Document
     
-  if document_list['Letter_to_Client_Final_Credit']:
+  if document_list['Letter_to_Client_Final_Credit_Report']:
     Letter_to_Client_Final_Credit_Report_Document
     
   if document_list['General_Release']:
     General_Release_Document
     
-  if document_list['Closing_letter_GLBS_LL']:
-    Closing_letter_GLBS_LL_Document
+  if document_list['Closing_letter']:
+    Closing_letter_Document
     
   if document_list['Client_Appointment_Reminder']:
     Client_Appointment_Reminder_Document
@@ -50,11 +47,7 @@ code: |
     
   signature_date
   gbls_download  
-  
-  
-  
-    
-   
+
 ---
 code: |
   legal_problems
@@ -66,12 +59,6 @@ code: |
   clients[0].name
   clients[0].address
   case_type
-  docket_number
-  No_Contact_Letter_Working_Document=True
----
-code: | 
-  clients[0].name
-  clients[0].address
   docket_number
   No_Contact_Letter_Document=True
 ---
@@ -104,7 +91,7 @@ code: |
 ---
 code: | 
   clients[0].address
-  Closing_letter_GLBS_LL_Document=True
+  Closing_letter_Document=True
 ---
 code: | 
   clients[0].address
@@ -122,13 +109,13 @@ continue button field: gbls_intro_screen
 question: | 
   Financial Forms
 subquestion: |
-  This form can help you prepare the following financial forms: 
+  This form can help you prepare the following forms: 
   
     * Affirmative Debt Collection  
     
     * Client Appointment Reminder 
     
-    * Closing letter GLBS LL 
+    * Closing letter
     
     * General Release 
     
@@ -141,8 +128,6 @@ subquestion: |
     * Letter to client to prepare for interview
     
     * No Contact Letter
-    
-    * No Contact Letter Working
     
     * Plain Language Retainer
 ---
@@ -176,21 +161,20 @@ fields:
 ---
 id: gbls document list
 question: |
-  Which financial documents do you need?
+  Which documents do you need?
 fields:
-  - Financial documents: document_list
+  - Documents: document_list
     datatype: checkboxes
     choices: 
       - Affirmative Debt Collection: Affirmative_Debt_Collection
       - Client Appointment Reminder: Client_Appointment_Reminder
-      - Closing letter GLBS LL: Closing_letter_GLBS_LL
+      - Closing letter: Closing_letter
       - General Release: General_Release
       - Letter to Client Final Credit Report: Letter_to_Client_Final_Credit_Report
       - Letter to Client re Telephonic: Letter_to_Client_re_Telephonic
       - Letter to client sending Discharge: Letter_to_client_sending_Discharge
       - Letter to client to prepare for interview: Letter_to_client_to_prepare_for_interview
       - No Contact Letter: No_Contact_Letter
-      - No Contact Letter Working: No_Contact_Letter_Working
       - Plain Language Retainer: Plain_Language_Retainer
     none of the above: false
 ---
@@ -260,7 +244,7 @@ code: |
   Client_Appointment_Reminder.enabled = document_list['Client_Appointment_Reminder']
 ---
 code: |
-  Closing_letter_GLBS_LL.enabled = document_list['Closing_letter_GLBS_LL']
+  Closing_letter.enabled = document_list['Closing_letter']
 ---
 code: |
   General_Release.enabled = document_list['General_Release']
@@ -281,9 +265,6 @@ code: |
   No_Contact_Letter.enabled = document_list['No_Contact_Letter']
 ---
 code: |
-  No_Contact_Letter_Working.enabled = document_list['No_Contact_Letter_Working']
----
-code: |
   Plain_Language_Retainer.enabled = document_list['Plain_Language_Retainer']
 ---
 attachments:
@@ -300,10 +281,10 @@ attachments:
     docx template file: Client_Appointment_Reminder.docx
   
   - name: Closing letter GLBS LL
-    filename: Closing_letter_GLBS_LL.docx   
-    variable name: Closing_letter_GLBS_LL[i]     
+    filename: Closing_letter.docx   
+    variable name: Closing_letter[i]     
     skip undefined: True
-    docx template file: Closing_letter_GLBS_LL.docx
+    docx template file: Closing_letter.docx
     
   - name: General Release 
     filename: General_Release.docx  
@@ -341,12 +322,6 @@ attachments:
     skip undefined: True
     docx template file: No_Contact_Letter.docx
     
-  - name: No Contact Letter Working
-    filename: No_Contact_Letter_Working.docx  
-    variable name: No_Contact_Letter_Working[i]      
-    skip undefined: True
-    docx template file: No_Contact_Letter_Working.docx
-    
   - name: Plain Language Retainer
     filename: Plain_Language_Retainer.docx  
     variable name: Plain_Language_Retainer[i]      
@@ -356,21 +331,19 @@ attachments:
 objects:
   - Plain_Language_Retainer: ALDocument.using(title="Plain Language Retainer", filename="Plain_Language_Retainer.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
-  - No_Contact_Letter_Working: ALDocument.using(title="No Contact Letter Working", filename="No_Contact_Letter_Working.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  - No_Contact_Letter: ALDocument.using(title="No Contact Letter", filename="No_Contact_Letter.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
-  - No_Contact_Letter: ALDocument.using(title="No Contact Letter", filename="No_Contact_Letter.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE) 
-#  
   - Letter_to_client_to_prepare_for_interview: ALDocument.using(title="Letter to client to prepare for interview", filename="Letter_to_client_to_prepare_for_interview.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
   - Letter_to_client_sending_Discharge: ALDocument.using(title="Letter to client sending Discharge", filename="Letter_to_client_sending_Discharge.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
   - Letter_to_Client_re_Telephonic: ALDocument.using(title="Letter to Client re Telephonic", filename="Letter_to_Client_re_Telephonic.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
-  - Letter_to_Client_Final_Credit_Report: ALDocument.using(title="Letter to Client Final Credit Report Working", filename="Letter_to_Client_Final_Credit_Report.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  - Letter_to_Client_Final_Credit_Report: ALDocument.using(title="Letter to Client Final Credit Report", filename="Letter_to_Client_Final_Credit_Report.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
   - General_Release: ALDocument.using(title="General Release ", filename="General_Release.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
-  - Closing_letter_GLBS_LL: ALDocument.using(title="Closing letter GLBS LL", filename="Closing_letter_GLBS_LL.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  - Closing_letter: ALDocument.using(title="Closing letter", filename="Closing_letter.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
   - Client_Appointment_Reminder: ALDocument.using(title="Client Appointment Reminder", filename="Client_Appointment_Reminder.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
@@ -378,7 +351,7 @@ objects:
   
 ---
 objects:
- - al_court_bundle: ALDocumentBundle.using(elements=[Plain_Language_Retainer, No_Contact_Letter, Letter_to_client_to_prepare_for_interview, Letter_to_client_sending_Discharge, No_Contact_Letter_Working, Letter_to_Client_re_Telephonic, Letter_to_Client_Final_Credit_Report, General_Release, Closing_letter_GLBS_LL, Client_Appointment_Reminder, Affirmative_Debt_Collection], filename="financial_documents.docx", title="All forms to download for your records", enabled=True) 
+ - al_court_bundle: ALDocumentBundle.using(elements=[Plain_Language_Retainer, Letter_to_client_to_prepare_for_interview, Letter_to_client_sending_Discharge, No_Contact_Letter, Letter_to_Client_re_Telephonic, Letter_to_Client_Final_Credit_Report, General_Release, Closing_letter, Client_Appointment_Reminder, Affirmative_Debt_Collection], filename="documents.docx", title="All forms to download for your records", enabled=True) 
 ---
 id: download documents
 event: gbls_download
