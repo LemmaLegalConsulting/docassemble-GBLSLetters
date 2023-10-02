@@ -7,88 +7,361 @@ metadata:
     Fill in the blanks
 ---
 objects:
-  clients: ALPeopleList.using(there_are_any=True)
-  attorneys: ALPeopleList.using(there_are_any=True)
----
-features:
-  use catchall: True
+  clients: ALPeopleList.using(there_are_any=False)
+  attorneys: ALPeopleList.using(there_are_any=False)
+  documents: ALPeopleList
 ---
 mandatory: True
 code: |
-  template_to_fill  
-  if not start_fresh:
-    load_existing_answers
-  download_template
+  gbls_intro_screen
+  
+  if document_list['Plain_Language_Retainer']:
+    Plain_Language_Retainer_Document
+    
+  if document_list['No_Contact_Letter']:
+    No_Contact_Letter_Document
+    
+  if document_list['Letter_to_client_to_prepare_for_interview']:
+    Letter_to_client_to_prepare_for_interview_Document
+    
+  if document_list['Letter_to_client_sending_Discharge']:
+    Letter_to_client_sending_Discharge_Document
+  
+  if document_list['Letter_to_Client_re_Telephonic']:
+    Letter_to_Client_re_Telephonic_Document
+    
+  if document_list['Letter_to_Client_Final_Credit_Report']:
+    Letter_to_Client_Final_Credit_Report_Document
+    
+  if document_list['General_Release']:
+    General_Release_Document
+    
+  if document_list['Closing_letter']:
+    Closing_letter_Document
+    
+  if document_list['Client_Appointment_Reminder']:
+    Client_Appointment_Reminder_Document
+    
+  if document_list['Affirmative_Debt_Collection']:
+    Affirmative_Debt_Collection_Document
+    
+  signature_date
+  gbls_download  
+
 ---
-id: upload template
-question: |
-  Upload a template to fill in
+code: |
+  legal_problems
+  clients[0].name
+  clients[0].signature
+  Plain_Language_Retainer_Document=True
+---
+code: | 
+  clients[0].name
+  clients[0].address
+  case_type
+  docket_number
+  No_Contact_Letter_Document=True
+---
+code: | 
+  clients[0].address
+  Documents_for_interview
+  Letter_to_client_to_prepare_for_interview_Document=True
+---
+code: | 
+  clients[0].name
+  clients[0].address
+  any_debts_not_discharged 
+  any_secured_debts 
+  Letter_to_client_sending_Discharge_Document=True
+---
+code: | 
+  clients[0].name
+  Letter_to_Client_re_Telephonic_Document=True
+---
+code: | 
+  clients[0].name
+  clients[0].address
+  Letter_to_Client_Final_Credit_Report_Document=True
+---
+code: | 
+  clients[0].name
+  law_firm 
+  clients[0].signature
+  General_Release_Document=True
+---
+code: | 
+  clients[0].address
+  Closing_letter_Document=True
+---
+code: | 
+  clients[0].address
+  Client_Appointment_Reminder_Document=True
+---
+code: | 
+  clients[0].name
+  other_parties[0].name
+  case_type
+  clients[0].signature
+  Affirmative_Debt_Collection_Document=True
+---
+id: gbls intro
+continue button field: gbls_intro_screen
+question: | 
+  Financial Forms
 subquestion: |
-  You can select an existing set of answers, like from an intake interview, to use 
-  to complete the template. If you add new fields to the template,
-  you will get a very basic chance to provide an answer to the new field.
-fields:
-  - Upload a DOCX template file: template_to_fill
-    datatype: file
-    accept: |
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"    
+  This form can help you prepare the following forms: 
+  
+    * Affirmative Debt Collection  
+    
+    * Client Appointment Reminder 
+    
+    * Closing letter
+    
+    * General Release 
+    
+    * Letter to Client Final Credit Report 
+    
+    * Letter to Client re Telephonic 
+    
+    * Letter to client sending Discharge 
+    
+    * Letter to client to prepare for interview
+    
+    * No Contact Letter
+    
+    * Plain Language Retainer
 ---
-id: download template
-event: download_template
+id: name of the first person
+sets:
+  - clients[0].name.first
+  - clients[0].name.last
+  - clients[0].name.middle
+  - clients[0].name.suffix
 question: |
-  Your template is ready
-attachment: 
-  docx template file:
-    code: |
-      template_to_fill[0]
+  % if hasattr(x, 'ask_number') and x.ask_number and x.target_number == 1:
+  Name of ${ noun_plural(x.object_name(),1) }
+  % else:
+  What is your name 
+  % endif
+fields:
+  - code: |
+      clients[0].name_fields()
+---
+id: name of the other party
+sets:
+  - other_parties[0].name.first
+  - other_parties[0].name.last
+  - other_parties[0].name.middle
+  - other_parties[0].name.suffix
+question: |
+  What is the defendant's name?
+fields:
+  - code: |
+      other_parties[0].name_fields()
+---
+id: gbls document list
+question: |
+  Which documents do you need?
+fields:
+  - Documents: document_list
+    datatype: checkboxes
+    choices: 
+      - Affirmative Debt Collection: Affirmative_Debt_Collection
+      - Client Appointment Reminder: Client_Appointment_Reminder
+      - Closing letter: Closing_letter
+      - General Release: General_Release
+      - Letter to Client Final Credit Report: Letter_to_Client_Final_Credit_Report
+      - Letter to Client re Telephonic: Letter_to_Client_re_Telephonic
+      - Letter to client sending Discharge: Letter_to_client_sending_Discharge
+      - Letter to client to prepare for interview: Letter_to_client_to_prepare_for_interview
+      - No Contact Letter: No_Contact_Letter
+      - Plain Language Retainer: Plain_Language_Retainer
+    none of the above: false
+---
+id: legal problems
+question: |
+  What is the legal problem that you have?
+fields:
+  - no label: legal_problems
+    datatype: area
+---
+id: case type
+question: |
+  What is the case type
+fields:
+  - no label: case_type
+---
+id: docket number
+question: |
+  What is the docket number?
+fields:
+  - no label: docket_number
+---
+id: letter to client to prepare for interview
+question: |
+  Below are the different options for the interview. Choose the one that applies to you.
+fields:
+  - no label: Documents_for_interview
+    datatype: checkboxes
+    choices:
+      - Social Security Card or letter from Social Security showing your Social Security number
+      - Driver’s license or other Picture ID
+      -	Any papers concerning your debts
+      -	Any papers concerning any lawsuits that you are involved in
+      -	If you are divorced, copy of divorce decree and any child support or alimony orders
+      -	Copies of your bank statements if you have a bank account. Please bring statements for up to a year ago, if you have them. More recent statements are more important
+      -	Copies of your pay stubs for this year if you are working
+      -	If you receive social security or a pension or unemployment or any type of welfare payments, documents showing your payments
+      -	Tax returns for last two years if you filed taxes
+
+---
+id: any debts not discharged
+question: |
+  Do you have any debts not discharged?
+fields:
+  - no label: any_debts_not_discharged
+    datatype: yesnoradio
+---
+id: any secured debts
+question: |
+  Do you have any secured debts?
+fields:
+  - no label: any_secured_debts
+    datatype: yesnoradio
+
+---
+id: Clients law firm
+question: |
+  Which law firm has been maintaining your information?
+fields:
+  - no label: law_firm
+  
 ---
 code: |
-  if user_has_privilege(['developer', 'admin']):
-    all_answer_sets = get_saved_interview_list(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", user_id="all", exclude_newly_started_sessions=False)
-  else:
-    all_answer_sets = get_saved_interview_list(filename="docassemble.AssemblyLine:al_saved_sessions_store.yml", exclude_newly_started_sessions=False)
+  Affirmative_Debt_Collection.enabled = document_list['Affirmative_Debt_Collection']
 ---
 code: |
-  load_interview_answers(all_answer_sets[int(selected_answers)]["filename"], all_answer_sets[int(selected_answers)]["key"])
-  load_existing_answers = True
+  Client_Appointment_Reminder.enabled = document_list['Client_Appointment_Reminder']
 ---
-###################### Catchall questions ###########################################
+code: |
+  Closing_letter.enabled = document_list['Closing_letter']
 ---
-generic object: DACatchAll
+code: |
+  General_Release.enabled = document_list['General_Release']
+---
+code: |
+  Letter_to_Client_Final_Credit_Report.enabled = document_list['Letter_to_Client_Final_Credit_Report']
+---
+code: |
+  Letter_to_Client_re_Telephonic.enabled = document_list['Letter_to_Client_re_Telephonic']
+---
+code: |
+  Letter_to_client_sending_Discharge.enabled = document_list['Letter_to_client_sending_Discharge']
+---
+code: |
+  Letter_to_client_to_prepare_for_interview.enabled = document_list['Letter_to_client_to_prepare_for_interview']
+---
+code: |
+  No_Contact_Letter.enabled = document_list['No_Contact_Letter']
+---
+code: |
+  Plain_Language_Retainer.enabled = document_list['Plain_Language_Retainer']
+---
+attachments:
+  - name: Affirmative Debt Collection 
+    filename: Affirmative_Debt_Collection.docx    
+    variable name: Affirmative_Debt_Collection[i]      
+    skip undefined: True
+    docx template file: Affirmative_Debt_Collection.docx 
+    
+  - name: Client Appointment Reminder 
+    filename: Client_Appointment_Reminder.docx 
+    variable name: Client_Appointment_Reminder[i]      
+    skip undefined: True
+    docx template file: Client_Appointment_Reminder.docx
+  
+  - name: Closing letter GLBS LL
+    filename: Closing_letter.docx   
+    variable name: Closing_letter[i]     
+    skip undefined: True
+    docx template file: Closing_letter.docx
+    
+  - name: General Release 
+    filename: General_Release.docx  
+    variable name: General_Release[i]      
+    skip undefined: True
+    docx template file: General_Release.docx
+    
+  - name: Letter to Client Final Credit Report
+    filename: Letter_to_Client_Final_Credit_Report.docx  
+    variable name: Letter_to_Client_Final_Credit_Report[i]      
+    skip undefined: True
+    docx template file: Letter_to_Client_Final_Credit_Report.docx
+
+  - name: Letter to Client re Telephonic
+    filename: Letter_to_Client_re_Telephonic.docx  
+    variable name: Letter_to_Client_re_Telephonic[i]      
+    skip undefined: True
+    docx template file: Letter_to_Client_re_Telephonic.docx
+    
+  - name: Letter to client sending Discharge
+    filename: Letter_to_client_sending_Discharge.docx  
+    variable name: Letter_to_client_sending_Discharge[i]      
+    skip undefined: True
+    docx template file: Letter_to_client_sending_Discharge.docx  
+    
+  - name: Letter to client to prepare for interview
+    filename: Letter_to_client_to_prepare_for_interview.docx  
+    variable name: Letter_to_client_to_prepare_for_interview[i]      
+    skip undefined: True
+    docx template file: Letter_to_client_to_prepare_for_interview.docx
+    
+  - name: No Contact Letter
+    filename: No_Contact_Letter.docx  
+    variable name: No_Contact_Letter[i]      
+    skip undefined: True
+    docx template file: No_Contact_Letter.docx
+    
+  - name: Plain Language Retainer
+    filename: Plain_Language_Retainer.docx  
+    variable name: Plain_Language_Retainer[i]      
+    skip undefined: True
+    docx template file: Plain_Language_Retainer.docx
+---
+objects:
+  - Plain_Language_Retainer: ALDocument.using(title="Plain Language Retainer", filename="Plain_Language_Retainer.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - No_Contact_Letter: ALDocument.using(title="No Contact Letter", filename="No_Contact_Letter.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Letter_to_client_to_prepare_for_interview: ALDocument.using(title="Letter to client to prepare for interview", filename="Letter_to_client_to_prepare_for_interview.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Letter_to_client_sending_Discharge: ALDocument.using(title="Letter to client sending Discharge", filename="Letter_to_client_sending_Discharge.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Letter_to_Client_re_Telephonic: ALDocument.using(title="Letter to Client re Telephonic", filename="Letter_to_Client_re_Telephonic.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Letter_to_Client_Final_Credit_Report: ALDocument.using(title="Letter to Client Final Credit Report", filename="Letter_to_Client_Final_Credit_Report.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - General_Release: ALDocument.using(title="General Release ", filename="General_Release.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Closing_letter: ALDocument.using(title="Closing letter", filename="Closing_letter.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Client_Appointment_Reminder: ALDocument.using(title="Client Appointment Reminder", filename="Client_Appointment_Reminder.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+  - Affirmative_Debt_Collection: ALDocument.using(title="Affirmative Debt Collection", filename="Affirmative_Debt_Collection.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  
+---
+objects:
+ - al_court_bundle: ALDocumentBundle.using(elements=[Plain_Language_Retainer, Letter_to_client_to_prepare_for_interview, Letter_to_client_sending_Discharge, No_Contact_Letter, Letter_to_Client_re_Telephonic, Letter_to_Client_Final_Credit_Report, General_Release, Closing_letter, Client_Appointment_Reminder, Affirmative_Debt_Collection], filename="documents.docx", title="All forms to download for your records", enabled=True) 
+---
+id: download documents
+event: gbls_download
 question: |
-  What is ${ x.object_name() }?
-fields:
-  - no label: x.value
-validation code: |
-  define(x.instanceName, x.value)
----
-if: |
-  x.context == 'float'
-generic object: DACatchAll
-question: |
-  How much is ${ x.object_name() }?
-fields:
-  - Amount: x.value
-    datatype: currency
-validation code: |
-  define(x.instanceName, x.value)
----
-if: |
-  x.data_type_guess() == 'bool'
-generic object: DACatchAll
-question: |
-  ${x.object_name()}?
-yesno: x.value
-validation code: |
-  define(x.instanceName, x.value)
----
-if: |
-  x.object_name().endswith('date')
-generic object: DACatchAll
-question: |
-  ${x.object_name()}?
-fields:
-  - Date: x.value
-    datatype: date
-validation code: |
-  define(x.instanceName, x.value)
+  All done
+subquestion: |
+  
+  ${ al_court_bundle.download_list_html() }
+  
+
+  ${ al_court_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
