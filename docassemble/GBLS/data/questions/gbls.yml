@@ -11,6 +11,9 @@ objects:
   attorneys: ALPeopleList.using(there_are_any=False)
   documents: ALPeopleList
 ---
+features:
+  bootstrap theme: gbls.css
+---
 mandatory: True
 code: |
   gbls_intro_screen
