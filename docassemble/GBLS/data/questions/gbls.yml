@@ -7,8 +7,14 @@ objects:
   attorneys: ALPeopleList.using(there_are_any=False)
   documents: ALPeopleList
 ---
+code: |
+  AL_ORGANIZATION_TITLE = "GBLS"
+---
 features:
   bootstrap theme: gbls.css
+---
+objects:
+  - al_logo: DAStaticFile.using(filename="gbls.png")
 ---
 mandatory: True
 code: |
