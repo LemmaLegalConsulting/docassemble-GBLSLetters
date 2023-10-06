@@ -2,10 +2,6 @@
 include:
   - docassemble.AssemblyLine:assembly_line.yml
 ---
-metadata:
-  title: |
-    Fill in the blanks
----
 objects:
   clients: ALPeopleList.using(there_are_any=False)
   attorneys: ALPeopleList.using(there_are_any=False)
