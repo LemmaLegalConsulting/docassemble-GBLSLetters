@@ -1,20 +1,27 @@
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
+  - theme.yml
+---
+metadata:
+  title: >-
+    Letter Suite  
+  short title: >-
+    Letter Suite 
+  description: |-
+    Letter Suite
+  tags: []
+  authors:
+    - Lemma Legal
+    - Quinten Steenhuis
+    - Mia Bonardi
+    - Stavros Constantinou
+    - Chris Emrich
 ---
 objects:
   clients: ALPeopleList.using(there_are_any=False)
   attorneys: ALPeopleList.using(there_are_any=False)
   documents: ALPeopleList
----
-code: |
-  AL_ORGANIZATION_TITLE = "GBLS"
----
-features:
-  bootstrap theme: gbls.css
----
-objects:
-  - al_logo: DAStaticFile.using(filename="gbls.png")
 ---
 mandatory: True
 code: |
