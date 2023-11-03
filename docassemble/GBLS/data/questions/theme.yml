@@ -1,5 +1,9 @@
 features:
-  bootstrap theme: gbls.css
+  progress bar: True
+  question back button: True
+  labels above fields: True
+  bootstrap theme: gbls-bootstrap-theme.css
+  css: gbls.css
 ---
 objects:
   - al_logo: DAStaticFile.using(filename="gbls.png")
