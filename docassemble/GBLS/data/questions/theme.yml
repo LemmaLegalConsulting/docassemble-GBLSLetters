@@ -5,12 +5,10 @@ features:
   bootstrap theme: gbls-bootstrap-theme.css
   css: gbls.css
 ---
-objects:
-  - al_logo: DAStaticFile.using(filename="gbls.png")
----
 code: |
   AL_ORGANIZATION_TITLE = "GBLS"
   AL_ORGANIZATION_HOMEPAGE = "https://www.gbls.org/"
   AL_DEFAULT_STATE = "MA"
   AL_DEFAULT_COUNTRY = "US"
 ---
+
