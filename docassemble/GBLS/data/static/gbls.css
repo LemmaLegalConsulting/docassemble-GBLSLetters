@@ -9,7 +9,19 @@
 * TODO: Non-radio and text inputs are not taken care of
 * or tested. (09/04/19)
 */
-
+.al-logo{
+  display: none;
+}
+.title-row-1{
+  display: none;
+}
+.title-row-2 {
+  color: rgba( 64, 64, 64, 1 ) !important;
+  font-size: 14px;
+  font-family: "Roboto",sans-serif;
+  text-transform: uppercase;
+  font-weight: normal;
+}
 span, div, p {
   color: rgba( 70, 70, 70, 1 );
   font-family: "Roboto",sans-serif;

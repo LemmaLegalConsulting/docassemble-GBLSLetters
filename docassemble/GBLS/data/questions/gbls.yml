@@ -2,7 +2,6 @@
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - theme.yml
-  - interview_list.yml
 ---
 metadata:
   title: >-

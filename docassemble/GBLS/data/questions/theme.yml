@@ -2,8 +2,9 @@ features:
   progress bar: True
   question back button: True
   labels above fields: True
-  bootstrap theme: gbls-bootstrap-theme.css
-  css: gbls.css
+  #bootstrap theme: gbls-bootstrap-theme.css
+  css: 
+    - gbls.css
 ---
 code: |
   AL_ORGANIZATION_TITLE = "GBLS"
