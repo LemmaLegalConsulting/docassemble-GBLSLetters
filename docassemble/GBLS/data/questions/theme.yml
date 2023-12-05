@@ -1,8 +1,7 @@
 features:
-  progress bar: True
+  progress bar: False
   question back button: True
   labels above fields: True
-  #bootstrap theme: gbls-bootstrap-theme.css
   css: 
     - gbls.css
 ---
@@ -11,5 +10,8 @@ code: |
   AL_ORGANIZATION_HOMEPAGE = "https://www.gbls.org/"
   AL_DEFAULT_STATE = "MA"
   AL_DEFAULT_COUNTRY = "US"
+  speak_text = False
 ---
-
+default screen parts:
+  pre: |
+---
