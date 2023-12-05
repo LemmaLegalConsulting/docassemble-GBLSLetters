@@ -1,10 +1,23 @@
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
+  - theme.yml
 ---
 metadata:
-  title: |
-    Fill in the blanks
+  title: >-
+    Letter Suite  
+  short title: >-
+    Letter Suite 
+  description: |-
+    Letter Suite
+  tags: []
+  authors:
+    - Lemma Legal
+    - Quinten Steenhuis
+    - Mia Bonardi
+    - Stavros Constantinou
+    - Hayden McGuire
+    - Chris Emrich
 ---
 objects:
   clients: ALPeopleList.using(there_are_any=False)
