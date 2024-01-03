@@ -1,6 +1,6 @@
 # docassemble.GBLS
 
-A docassemble extension.
+Letter Suite for Greater Boston Legal Services.
 
 ## Author
 
