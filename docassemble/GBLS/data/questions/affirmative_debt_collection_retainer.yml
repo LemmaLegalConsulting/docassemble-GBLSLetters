@@ -1,0 +1,19 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - shared.yml
+---
+objects:
+  clients: ALPeopleList.using(there_are_any=True, complete_attribute = 'Complete')
+  attorneys: ALPeopleList.using(there_are_any=True, complete_attribute = 'Complete')
+  documents: ALPeopleList
+---
+###################### Order Block for Affirmative Debt Collection Retainer ######################
+code: | 
+  clients[0].name
+  attorneys[0].name
+  attorneys[0].signature
+  other_parties[0].name
+  
+  interview_affirmative_debt_collection_retainer = True
+---

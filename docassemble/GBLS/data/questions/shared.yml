@@ -1,0 +1,110 @@
+###################### Questions Used Throughout All Interviews/Forms ######################
+comment: If you need one of theses questions to be different for a specific form you should create an edited version within the YML for that form.
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - no_contact_letter.yml
+  - plain_language_retainer.yml
+  - general_release.yml
+  - closing_letter.yml
+  - affirmative_debt_collection_retainer.yml
+  - client_letter_documents_for_interview.yml
+  - client_letter_final_credit_report.yml
+  - client_letter_re_telephonic.yml
+  - client_letter_appointment_reminder.yml
+  - client_letter_bankruptcy_discharge.yml
+---
+id: clients name
+sets:
+  - clients[0].name.first
+  - clients[0].name.last
+  - clients[0].name.middle
+  - clients[0].name.suffix
+question: |
+  What is the clients name? 
+fields:
+  - code: |
+      clients[0].name_fields()
+---
+id: persons contact information
+question: |
+  What is ${ clients[0].name }'s contact info?
+fields:
+  - Phone: clients[0].phone_number
+  - Email: clients[0].email
+---
+id: name of advocate
+sets:
+  - attorneys[0].name.first
+  - attorneys[0].name.last
+  - attorneys[0].name.middle
+  - attorneys[0].name.suffix
+generic object: ALPeopleList
+question: |
+  Who is the advocate sending these documents?
+fields:
+  - code: |
+      attorneys[0].name_fields()
+---
+id: advocate contact info
+sets:
+  - attorneys[0].phone_number
+  - attorneys[0].email
+generic object: ALPeopleList
+question: |
+  Contact info for ${ attorneys[0].name } 
+fields:
+  - Phone: attorneys[0].phone_number
+  - Email: attorneys[0].email
+---
+id: case type
+question: |
+  What is the case type?
+field: case_type
+dropdown:
+  - Small Claims
+  - Bankruptcy
+---
+id: intake status and date
+question: |
+  Have you conducted an intake with ${ clients[0].name.first } yet?
+fields:
+  - Did you do an intake?: intake_complete
+    datatype: yesnoradio
+  - When was the intake?: intake_date
+    datatype: date
+    show if: intake_complete
+    required: False
+---
+id: any debts not discharged
+question: |
+  Does the client have any debts that have not been discharged?
+fields:
+  - no label: any_debts_not_discharged
+    datatype: yesnoradio
+---
+question: |
+  Fill in the blanks. 
+subquestion: |
+  This will be on the letter you send. 
+  
+  "This means that you are no longer legally obligated to pay the debts we listed, but [FIELD debts_not_discharged] are not discharged debts." 
+fields:
+  - Debts not discharged?: debts_not_discharged
+  - Are any of the remaining debts unsecured?: any_secured_debts
+    datatype: yesnoradio
+---
+---
+id: download documents
+event: gbls_download
+question: |
+  All done
+subquestion: |
+  
+  ${ al_court_bundle.download_list_html() }
+  
+
+  ${ al_court_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
+---
