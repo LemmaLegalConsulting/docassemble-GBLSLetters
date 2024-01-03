@@ -1,6 +1,7 @@
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - shared.yml
+  - theme.yml
 ---
 objects:
   - clients: ALPeopleList.using(there_are_any=True, complete_attribute='complete')
@@ -26,6 +27,7 @@ metadata:
 ###################### Main Order ######################
 mandatory: True
 code: |
+  available_forms
   unit
   doc_list 
   
@@ -79,10 +81,13 @@ fields:
       - Civil Legal Aid for Victims of Crime
       - The Asian Outreach Center
       - CASLS
-under: |
-  ###Available Forms 
-  
-  *Consumer Rights Unit*
+---
+id: available forms
+continue button field: available_forms
+question: |
+  Available Forms
+subquestion: |
+  Consumer Rights Unit
     
     * Affirmative Debt Collection Retainer
     * Client Letter Final Credit Report 
@@ -90,11 +95,11 @@ under: |
     * Client Letter Bankruptcy Discharge
     * Closing Letter
     
-  *Immigration Law Unit*
+  Immigration Law Unit
     
     * Client Appointment Reminder 
     
-  *Universal Forms*
+  Universal Forms
     
     * Client Letter Documents for Interview/Intake
     * No Contact Letter
@@ -126,7 +131,7 @@ code: |
   Affirmative_Debt_Collection_Retainer.enabled = doc_list['Affirmative Debt Collection Retainer'] 
 ---
 code: |
-  Client_Appointment_Reminder.enable = doc_list['Client Letter Appointment Reminder']   
+  Client_Appointment_Reminder.enabled = doc_list['Client Letter Appointment Reminder']   
 ---
 code: |
   Closing_letter.enabled = doc_list['Closing Letter']   

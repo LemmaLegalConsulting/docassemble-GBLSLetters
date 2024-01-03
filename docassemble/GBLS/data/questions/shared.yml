@@ -94,7 +94,6 @@ fields:
   - Are any of the remaining debts unsecured?: any_secured_debts
     datatype: yesnoradio
 ---
----
 id: download documents
 event: gbls_download
 question: |
