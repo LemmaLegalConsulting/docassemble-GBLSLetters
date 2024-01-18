@@ -43,10 +43,10 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
                 out.setdefault(package, []).append(prefix+name)
     return out
 
-setup(name='docassemble.GBLS',
+setup(name='docassemble.GBLSLetters',
       version='0.0.1',
       description=('A docassemble extension.'),
-      long_description='# docassemble.GBLS\r\n\r\nA docassemble extension.\r\n\r\n## Author\r\n\r\nStavros Constantinou, sconsta@bu.edu\r\n\r\n',
+      long_description='# docassemble.GBLSLetters\r\n\r\nA docassemble extension.\r\n\r\n## Author\r\n\r\nStavros Constantinou, sconsta@bu.edu\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Stavros Constantinou',
       author_email='sconsta@bu.edu',
@@ -56,6 +56,6 @@ setup(name='docassemble.GBLS',
       namespace_packages=['docassemble'],
       install_requires=[],
       zip_safe=False,
-      package_data=find_package_data(where='docassemble/GBLS/', package='docassemble.GBLS'),
+      package_data=find_package_data(where='docassemble/GBLSLetters/', package='docassemble.GBLSLetters'),
      )
 
