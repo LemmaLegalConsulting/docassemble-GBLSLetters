@@ -13,6 +13,7 @@ include:
   - client_letter_re_telephonic.yml
   - client_letter_appointment_reminder.yml
   - client_letter_bankruptcy_discharge.yml
+  - casls_retainer.yml
 ---
 id: clients name
 sets:

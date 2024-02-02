@@ -28,16 +28,3 @@ subquestion: |
 fields:
   - no label: legal_problems
 ---
-attachments:
-  - name: Plain Language Retainer
-    filename: Plain_Language_Retainer.docx  
-    variable name: Plain_Language_Retainer[i]      
-    skip undefined: True
-    docx template file: Plain_Language_Retainer.docx
----
-objects:
-  - Plain_Language_Retainer: ALDocument.using(title="Plain Language Retainer", filename="Plain_Language_Retainer.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
----
-objects:
- - al_court_bundle: ALDocumentBundle.using(elements=[Plain_Lanuage_Retainer_Document], filename="documents.docx", title="All forms to download for your records", enabled=True) 
----
