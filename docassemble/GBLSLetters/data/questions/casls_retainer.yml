@@ -1,0 +1,37 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - shared.yml
+---
+objects:
+  clients: ALPeopleList.using(there_are_any=True, complete_attribute='complete')
+  attorneys: ALPeopleList.using(there_are_any=True, complete_attribute='complete')
+  documents: ALPeopleList
+---
+#interview order for plain language retainer
+code: |
+  clients[0].name
+  legal_problems
+  scope_of_representation
+  attorneys[0].name
+  attorneys[0].signature
+  clients[0].signature
+
+  interview_order_casls_retainer = True
+---
+id: legal problems
+question: |
+  What legal issue are you assisting with?
+subquestion: |
+  This will be in one of your documents.
+  
+  "${ clients[0].name } and GBLS agree that GBLS will provide legal help with [FIELD legal_problems]." 
+fields:
+  - no label: legal_problems
+---
+id: scope of rep
+question: |
+  What is the scope of representation GBLS is providing the client?
+fields:
+  - Describe the scope: scope_of_representation 
+---
