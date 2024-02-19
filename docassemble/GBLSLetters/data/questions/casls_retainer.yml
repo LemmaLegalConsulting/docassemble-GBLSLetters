@@ -10,14 +10,26 @@ objects:
 ---
 #interview order for plain language retainer
 code: |
-  clients[0].name
+  clients[i].name
+  clients[i].signature
   legal_problems
   scope_of_representation
-  attorneys[0].name
-  attorneys[0].signature
-  clients[0].signature
-
+  attorneys[i].name
+  attorneys[i].signature
+  
   interview_order_casls_retainer = True
+---
+code: |
+  clients[i].name
+  clients[i].address.gather()
+  clients[i].signature
+  clients[i].complete = True
+---
+code: |
+  attorneys[i].name
+  attorneys[i].address.gather()
+  attorneys[i].signature
+  attorneys[i].complete = True
 ---
 id: legal problems
 question: |

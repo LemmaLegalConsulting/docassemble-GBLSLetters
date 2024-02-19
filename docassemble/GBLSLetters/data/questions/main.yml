@@ -4,8 +4,8 @@ include:
   - theme.yml
 ---
 objects:
-  - clients: ALPeopleList.using(there_are_any=True, complete_attribute='complete')
-  - attorneys: ALPeopleList.using(there_are_any=True, complete_attribute='complete')
+  - clients: ALPeopleList.using(there_are_any=True)
+  - attorneys: ALPeopleList.using(there_are_any=True)
   - documents: ALPeopleList
 ---
 metadata:

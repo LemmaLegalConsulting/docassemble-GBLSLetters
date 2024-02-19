@@ -15,6 +15,11 @@ include:
   - client_letter_bankruptcy_discharge.yml
   - casls_retainer.yml
 ---
+objects:
+  - clients: ALPeopleList.using(there_are_any=True)
+  - attorneys: ALPeopleList.using(there_are_any=True)
+  - documents: ALPeopleList
+---
 id: clients name
 sets:
   - clients[0].name.first
