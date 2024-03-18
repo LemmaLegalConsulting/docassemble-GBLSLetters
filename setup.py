@@ -46,7 +46,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
 setup(name='docassemble.GBLSLetters',
       version='0.0.1',
       description=('A docassemble extension.'),
-      long_description='# docassemble.GBLS\r\n\r\nLetter Suite for Greater Boston Legal Services.\r\n\r\n## Author\r\n\r\nStavros Constantinou, sconsta@bu.edu\r\n\r\n',
+      long_description='# docassemble.GBLSLetters\r\n\r\nLetter Suite for Greater Boston Legal Services.\r\n\r\n## Author\r\n\r\nStavros Constantinou, sconsta@bu.edu\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Stavros Constantinou',
       author_email='sconsta@bu.edu',
