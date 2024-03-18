@@ -1,5 +1,4 @@
 ###################### Questions Used Throughout All Interviews/Forms ######################
-comment: If you need one of theses questions to be different for a specific form you should create an edited version within the YML for that form.
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
@@ -13,6 +12,12 @@ include:
   - client_letter_re_telephonic.yml
   - client_letter_appointment_reminder.yml
   - client_letter_bankruptcy_discharge.yml
+  - casls_retainer.yml
+---
+objects:
+  - clients: ALPeopleList.using(there_are_any=True)
+  - attorneys: ALPeopleList.using(there_are_any=True)
+  - documents: ALPeopleList
 ---
 id: clients name
 sets:
@@ -26,12 +31,25 @@ fields:
   - code: |
       clients[0].name_fields()
 ---
-id: persons contact information
+id: clients contact information
 question: |
   What is ${ clients[0].name }'s contact info?
 fields:
   - Phone: clients[0].phone_number
   - Email: clients[0].email
+---
+id: clients address
+sets:
+  - clients[0].address.address
+  - clients[0].address.city
+  - clients[0].address.zip
+  - clients[0].address.unit
+  - clients[0].address.state
+question: |
+  What is ${ clients[0].name }'s address?
+fields:
+  - code: |
+      clients[0].address_fields()
 ---
 id: name of advocate
 sets:
@@ -39,7 +57,6 @@ sets:
   - attorneys[0].name.last
   - attorneys[0].name.middle
   - attorneys[0].name.suffix
-generic object: ALPeopleList
 question: |
   Who is the advocate sending these documents?
 fields:
@@ -50,7 +67,6 @@ id: advocate contact info
 sets:
   - attorneys[0].phone_number
   - attorneys[0].email
-generic object: ALPeopleList
 question: |
   Contact info for ${ attorneys[0].name } 
 fields:
@@ -93,17 +109,4 @@ fields:
   - Debts not discharged?: debts_not_discharged
   - Are any of the remaining debts unsecured?: any_secured_debts
     datatype: yesnoradio
----
-id: download documents
-event: gbls_download
-question: |
-  All done
-subquestion: |
-  
-  ${ al_court_bundle.download_list_html() }
-  
-
-  ${ al_court_bundle.send_button_html(show_editable_checkbox=True) }
-
-progress: 100
 ---

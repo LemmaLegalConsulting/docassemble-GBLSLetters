@@ -10,13 +10,24 @@ objects:
 ---
 #interview order for plain language retainer
 code: |
+  clients[0].name.full
   legal_problems
-  clients[0].name
+  scope_of_representation
+  attorneys[0].name.full
   clients[0].signature
-  attorneys[0].name
   attorneys[0].signature
-    
-  interview_order_plain_langauge_retainer = True
+  
+  interview_order_casls_retainer = True
+---
+code: |
+  clients[i].name
+  clients[i].signature
+  clients[i].complete = True
+---
+code: |
+  attorneys[i].name
+  attorneys[i].signature
+  attorneys[i].complete = True
 ---
 id: legal problems
 question: |
@@ -27,4 +38,10 @@ subquestion: |
   "${ clients[0].name } and GBLS agree that GBLS will provide legal help with [FIELD legal_problems]." 
 fields:
   - no label: legal_problems
+---
+id: scope of rep
+question: |
+  What is the scope of representation GBLS is providing the client?
+fields:
+  - Describe the scope: scope_of_representation 
 ---

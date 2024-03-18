@@ -4,8 +4,8 @@ include:
   - theme.yml
 ---
 objects:
-  - clients: ALPeopleList.using(there_are_any=True, complete_attribute='complete')
-  - attorneys: ALPeopleList.using(there_are_any=True, complete_attribute='complete')
+  - clients: ALPeopleList.using(there_are_any=True)
+  - attorneys: ALPeopleList.using(there_are_any=True)
   - documents: ALPeopleList
 ---
 metadata:
@@ -60,6 +60,9 @@ code: |
   
   if doc_list['Client Letter Bankruptcy Discharge']:
     interview_order_client_letter_bankruptcy_discharge
+    
+  if doc_list['CASLS Retainer']:
+    interview_order_casls_retainer
       
   signature_date
   gbls_download
@@ -99,6 +102,10 @@ subquestion: |
     
     * Client Appointment Reminder 
     
+  Cambridge and Somerville Legal Services
+  
+    * CASLS Retainer
+  
   Universal Forms
     
     * Client Letter Documents for Interview/Intake
@@ -125,13 +132,30 @@ fields:
       - General Release
       - Plain Language Retainer
       - No Contact Letter
+      - CASLS Retainer
     none of the above: false
+---
+id: download documents
+event: gbls_download
+question: |
+  All done!
+subquestion: |
+  Below you can download a PDF version of each document you produced.
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
+---
+############## DOCUMENTS START ##############
 ---
 code: |
   Affirmative_Debt_Collection_Retainer.enabled = doc_list['Affirmative Debt Collection Retainer'] 
 ---
 code: |
-  Client_Appointment_Reminder.enabled = doc_list['Client Letter Appointment Reminder']   
+  Client_Appointment_Reminder.enabled = doc_list['Client Letter Appointment Reminder'] 
 ---
 code: |
   Closing_letter.enabled = doc_list['Closing Letter']   
@@ -156,6 +180,9 @@ code: |
 ---
 code: |
   Plain_Language_Retainer.enabled = doc_list['Plain Language Retainer']
+---
+code: |
+  CASLS_Retainer_Agreement.enabled = doc_list['CASLS Retainer']
 ---
 attachments:
   - name: Affirmative Debt Collection 
@@ -217,6 +244,12 @@ attachments:
     variable name: Plain_Language_Retainer[i]      
     skip undefined: True
     docx template file: Plain_Language_Retainer.docx
+
+  - name: CASLS Retainer Agreement
+    filename: CASLS_Retainer_Agreement.docx
+    variable name: CASLS_Retainer_Agreement[i]
+    skip undefined: True
+    docx template file: CASLS_Retainer_Agreement.docx
 ---
 objects:
   - Plain_Language_Retainer: ALDocument.using(title="Plain Language Retainer", filename="Plain_Language_Retainer.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
@@ -238,22 +271,44 @@ objects:
   - Client_Appointment_Reminder: ALDocument.using(title="Client Letter Appointment Reminder", filename="Client_Appointment_Reminder.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
   
   - Affirmative_Debt_Collection_Retainer: ALDocument.using(title="Affirmative Debt Collection Retainer", filename="Affirmative_Debt_Collection_Retainer.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+
+  - CASLS_Retainer_Agreement: ALDocument.using(title="CASLS Retainer Agreement", filename="CASLS_Retainer_Agreement.docx", has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+---
+#objects:
+#  - al_court_bundle: ALDocumentBundle.using(
+#      elements=[
+#        Plain_Language_Retainer,
+#        Letter_to_client_to_prepare_for_interview,
+#        Letter_to_client_sending_Discharge,
+#        No_Contact_Letter,
+#        Letter_to_Client_re_Telephonic,
+#        Letter_to_Client_Final_Credit_Report,
+#        General_Release, Closing_letter,
+#        Client_Appointment_Reminder,
+#        Affirmative_Debt_Collection_Retainer,
+#        CASLS_Retainer_Agreement
+#       ], 
+#       filename="All forms.docx",
+#       title="All forms",
+#       enabled = True
+#     ) 
 ---
 objects:
-  - al_court_bundle: ALDocumentBundle.using(
+ - al_user_bundle: ALDocumentBundle.using(
       elements=[
-        Plain_Language_Retainer,
-        Letter_to_client_to_prepare_for_interview,
-        Letter_to_client_sending_Discharge,
-        No_Contact_Letter,
-        Letter_to_Client_re_Telephonic,
-        Letter_to_Client_Final_Credit_Report,
-        General_Release, Closing_letter,
-        Client_Appointment_Reminder,
-        Affirmative_Debt_Collection_Retainer
-       ], 
-       filename="All forms.docx",
-       title="All forms",
-       enabled = True
-     ) 
+       Plain_Language_Retainer,
+       Letter_to_client_to_prepare_for_interview,
+       Letter_to_client_sending_Discharge,
+       No_Contact_Letter,
+       Letter_to_Client_re_Telephonic,
+       Letter_to_Client_Final_Credit_Report,
+       General_Release, Closing_letter,
+       Client_Appointment_Reminder,
+       Affirmative_Debt_Collection_Retainer,
+       CASLS_Retainer_Agreement
+      ], 
+      filename="All forms",
+      title="All forms",
+      enabled = True
+    ) 
 ---
