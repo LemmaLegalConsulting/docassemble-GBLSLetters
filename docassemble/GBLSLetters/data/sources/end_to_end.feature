@@ -16,6 +16,10 @@ Feature: Complete GBLSLetters
       | clients[0].address.country | US |
       | attorneys[0].name.first | Casey |
       | attorneys[0].name.last | Counsel |
+      | attorneys[0].address.address | 456 Main Street |
+      | attorneys[0].address.city | Boston |
+      | attorneys[0].address.state | MA |
+      | attorneys[0].address.zip | 02108 |
       | unit | Consumer Rights Unit |
       | doc_list['No Contact Letter'] | True |
       | clients[0].phone_number | 6175550100 |
