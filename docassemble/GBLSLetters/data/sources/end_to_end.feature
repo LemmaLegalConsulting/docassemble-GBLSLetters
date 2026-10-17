@@ -31,5 +31,5 @@ Feature: Complete GBLSLetters
       | final_contact_date | today + 14 |
       | signature_date | today |
     Then the question id should be "download documents"
-    And I should see the phrase "All done!"
+    And I should see the phrase "Below you can download a PDF version"
     And I download "No_Contact_Letter.pdf"
